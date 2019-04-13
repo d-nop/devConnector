@@ -1,5 +1,6 @@
 const express = require("express");
 const moongoose = require("mongoose");
+const bodyParser = require("body-parser");
 
 const users = require("./routes/api/users");
 const profile = require("./routes/api/profile");
@@ -19,15 +20,18 @@ moongoose.connect(db, { useNewUrlParser: true })
         console.log(err);
     });
 
+// use Routes
+app.use("/api/users", users);
+app.use("/api/profile", profile);
+app.use("/api/posts", posts);
+
+//Body Paser Middleware
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+
 app.get("/", function(req, res) {
     res.send("Hello Worldddddd!");
-
 });
-
-// use Routes
-app.use("./api/users", users);
-app.use("./api/profile", profile);
-app.use("./api/posts", posts);
 
 const port = process.env.PORT || 3000;
 
